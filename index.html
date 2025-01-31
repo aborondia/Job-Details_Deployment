@@ -17,16 +17,11 @@
     />
     <style>
       #unity-container {
-        width: 100%;
         height: 100%;
+        aspect-ratio: 16/9;
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-      #unity-canvas {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
       }
     </style>
   </head>
@@ -37,8 +32,8 @@
     >
       <canvas
         id="unity-canvas"
-        width="960"
-        height="600"
+        width="1194"
+        height="834"
         tabindex="-1"
       ></canvas>
       <div id="unity-loading-bar">
@@ -93,7 +88,7 @@
         productName: "Job_Details",
         productVersion: "1.0",
         showBanner: unityShowBanner,
-        matchWebGLToCanvasSize: true,
+        matchWebGLToCanvasSize: false,
       };
 
       // By default, Unity keeps WebGL canvas render target size matched with
