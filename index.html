@@ -2,67 +2,99 @@
 <html lang="en-us">
   <head>
     <meta charset="utf-8" />
-    <meta
-      http-equiv="Content-Type"
-      content="text/html; charset=utf-8"
-    />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Unity Web Player | Job_Details</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: black;
+      }
+
+      #unity-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #unity-canvas {
+        width: 100%;
+        height: auto;
+        max-width: 100vw;
+        max-height: 100vh;
+        background: #231f20;
+      }
+
+      /* Loading Screen */
+      #loading-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      #loading-bar {
+        width: 60%;
+        height: 20px;
+        background: #444;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      #loading-bar-fill {
+        width: 0%;
+        height: 100%;
+        background: #00aaff;
+        transition: width 0.1s ease-in-out;
+      }
+
+      #loading-text {
+        color: white;
+        font-family: Arial, sans-serif;
+        margin-top: 10px;
+      }
+    </style>
   </head>
-  <style>
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: black; /* Adjust as needed */
-    }
+  <body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" width="1194" height="834" tabindex="-1"></canvas>
+    </div>
 
-    #unity-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    <div id="loading-container">
+      <div id="loading-bar">
+        <div id="loading-bar-fill"></div>
+      </div>
+      <p id="loading-text">Loading...</p>
+    </div>
 
-    #unity-canvas {
-      width: 100%;
-      height: auto;
-      max-width: 100vw;
-      max-height: 100vh;
-    }
-  </style>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0">
-    <canvas
-      id="unity-canvas"
-      width="1194"
-      height="834"
-      tabindex="-1"
-      style="width: 1194px; height: 834px; background: #231f20"
-    ></canvas>
     <script src="Build/Builds.loader.js"></script>
     <script>
+      // Mobile optimization
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
         var meta = document.createElement("meta");
         meta.name = "viewport";
-        meta.content =
-          "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
-        document.getElementsByTagName("head")[0].appendChild(meta);
+        meta.content = "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+        document.head.appendChild(meta);
 
         var canvas = document.querySelector("#unity-canvas");
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.style.position = "fixed";
-
         document.body.style.textAlign = "left";
       }
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
-        arguments: [],
+      // Create Unity instance with loading bar updates
+      var unityInstance = createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/Builds.data",
         frameworkUrl: "Build/Builds.framework.js",
         codeUrl: "Build/Builds.wasm",
@@ -70,10 +102,13 @@
         companyName: "AJB_INC",
         productName: "Job_Details",
         productVersion: "1.0",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      }, function (progress) {
+        document.querySelector("#loading-bar-fill").style.width = (progress * 100) + "%";
+        document.querySelector("#loading-text").innerText = "Loading... " + Math.round(progress * 100) + "%";
+      }).then(function (instance) {
+        document.querySelector("#loading-container").style.display = "none";
       });
-      //////////////////////////////////////
+
       function resizeCanvas() {
         var canvas = document.getElementById("unity-canvas");
         if (!canvas) return;
@@ -87,7 +122,7 @@
         var newWidth = windowWidth;
         var newHeight = windowWidth / aspectRatio;
 
-        if (newHeight != windowHeight || newWidth != windowWidth) {
+        if (newHeight > windowHeight) {
           newHeight = windowHeight;
           newWidth = windowHeight * aspectRatio;
         }
