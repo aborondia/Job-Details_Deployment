@@ -42,6 +42,7 @@
         max-width: 95vw;
         max-height: 95vh;
         object-fit: contain;
+        position: relative;
       }
 
      #loading-screen {
@@ -130,6 +131,8 @@
         if (_instance) {
           _instance.SendMessage("PanelResizer", "SetResolutionCategory", sizes);
         }
+
+        window.scrollTo(0,0);
       }
 
       window.addEventListener("resize", getResolutionCategory);
