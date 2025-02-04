@@ -114,7 +114,7 @@
         productName: "Job_Details",
         productVersion: "1.0",
         devicePixelRatio: 1,
-        matchWebGLToCanvasSize: false, // Allow manual resizing
+        matchWebGLToCanvasSize: false,
       };
       let _instance = null;
       var canvas = document.getElementById("unity-canvas");
@@ -163,7 +163,10 @@
                     loadingBarHidden = true;
                 }
             }, 100);
-          getResolutionCategory();
+            getResolutionCategory();
+            setTimeout(() => {
+              getResolutionCategory();
+              }, 500);
         })
         .catch((message) => {
           alert(message);
