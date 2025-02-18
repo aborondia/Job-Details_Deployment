@@ -1,3 +1,5 @@
 # [Job Details](https://cleaner-job-details.netlify.app/) - [Andrew Borondia](https://aborondia.netlify.app/projects)
 
-This is the deployment build of the [Job Details](https://cleaner-job-details.netlify.app/) app I created.
+This is the deployment build of the [Job Details](https://cleaner-job-details.netlify.app/) app I created in Unity.
+
+I created this to replace a paper based job reporting system used by my wife's work so she wouldn't have to travel to the office as much. I set up a backend which includes the entire flow for registering/saving users, authentication, saving & emailing (via sendgrid) reports, etc. The reports are compiled into a single pdf via a custom implementation of sharpPDF that converts the pdf into a filestream & attaches it to the emails without the need to save it on the users system (to avoid issues with WebGL & make the emailing process simpler for the end user). The frontend is a Unity app built using the UI Toolkit. I decided to go for a WebGL build to simplify getting started for new users, and to make pushing updates very easy when needed. Yes, I love my wife.
